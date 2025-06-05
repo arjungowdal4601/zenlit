@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
-import { Settings, MapPin, Link, CreditCard as Edit2, Camera } from 'lucide-react-native';
+import { Settings, MapPin, Link, Edit2, Camera } from 'lucide-react-native';
 import Animated, { 
   useSharedValue,
   useAnimatedStyle,

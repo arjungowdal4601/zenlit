@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeft, Camera, Calendar } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -9,6 +17,7 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import * as ImagePicker from 'expo-image-picker';
 import Colors from '../constants/Colors';
 import TextInput from '../components/TextInput';
 import Button from '../components/Button';
@@ -160,6 +169,26 @@ export default function CreateAccountStep2() {
 
   const removeInterest = (tag: string) => {
     setInterests(interests.filter(t => t !== tag));
+  };
+
+  const pickImage = async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Permission to access media library is required!');
+        return;
+      }
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfilePhoto(result.assets[0].uri);
+    }
   };
 
   const handleNext = async () => {
