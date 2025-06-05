@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeft, Camera, Calendar } from 'lucide-react-native';
+import * as ImagePicker from 'expo-image-picker';
 import Animated, { 
   useSharedValue, 
   useAnimatedStyle, 
@@ -42,11 +43,30 @@ export default function CreateAccountStep2() {
       easing: Easing.bezier(0.25, 0.1, 0.25, 1)
     });
     
-    translateY.value = withTiming(0, { 
+    translateY.value = withTiming(0, {
       duration: 400,
       easing: Easing.bezier(0.25, 0.1, 0.25, 1)
     });
   }, []);
+
+  const pickImage = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permission.status !== 'granted') {
+      console.warn('Permission to access gallery was denied');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setProfilePhoto(result.assets[0].uri);
+    }
+  };
 
   const handleDateChange = (text: string) => {
     // Remove any non-numeric characters
